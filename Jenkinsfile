@@ -2,6 +2,10 @@
 pipeline {
     agent any
 
+    environment {
+        SONARQUBE = 'SonarQube'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -22,6 +26,33 @@ pipeline {
         stage('Run Pytest') {
             steps {
                 sh 'jenkins-venv/bin/python -m pytest -v'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv("${SONARQUBE}") {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=aceest-fitness \
+                            -Dsonar.projectName='ACEest Fitness' \
+                            -Dsonar.sources=application \
+                            -Dsonar.tests=tests \
+                            -Dsonar.python.version=3.9 \
+                            -Dsonar.sourceEncoding=UTF-8
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
 
