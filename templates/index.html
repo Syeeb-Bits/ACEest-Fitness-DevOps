@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ACEest Fitness</title>
+</head>
+<body>
+    <h1>ACEest Fitness & Gym</h1>
+    <h2>Workout Tracker</h2>
+
+    <form action="/add" method="POST">
+        <input type="text" name="workout"
+               placeholder="Workout name" required>
+        <input type="number" name="duration"
+               placeholder="Duration (minutes)" min="1" required>
+        <button type="submit">Add Workout</button>
+    </form>
+
+    <h2>Workout History</h2>
+    <ul>
+        {% for item in workouts %}
+        <li>{{ item.workout }} - {{ item.duration }} minutes</li>
+        {% else %}
+        <li>No workouts added yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
