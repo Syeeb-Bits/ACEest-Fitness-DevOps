@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -10,13 +11,17 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv jenkins-venv
+                    jenkins-venv/bin/python -m pip install --upgrade pip
+                    jenkins-venv/bin/python -m pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Pytest') {
             steps {
-                sh 'python3 -m pytest -v'
+                sh 'jenkins-venv/bin/python -m pytest -v'
             }
         }
 
