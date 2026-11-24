@@ -36,7 +36,7 @@ pipeline {
                     withSonarQubeEnv("${SONARQUBE}") {
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=aceest-fitness \
+                            -Dsonar.projectKey=ACEest-Fitness \
                             -Dsonar.projectName='ACEest Fitness' \
                             -Dsonar.sources=application \
                             -Dsonar.tests=tests \
